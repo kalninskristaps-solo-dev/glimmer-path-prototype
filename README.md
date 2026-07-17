@@ -6,13 +6,16 @@ Original **match-3** prototype inspired by Candy Crush–class design (hooks, ju
 
 ## Play in browser
 
-### Option A — GitHub Pages (after deploy)
+### Share links (public)
 
-Open the repo **Settings → Pages**, source `main` / `/ (root)` or `/Prototype`, then visit:
+| | |
+|--|--|
+| **Play** | https://kalninskristaps-solo-dev.github.io/glimmer-path-prototype/Prototype/ |
+| **Repo** | https://kalninskristaps-solo-dev/glimmer-path-prototype |
 
-`https://<your-user>.github.io/<repo-name>/Prototype/`
+GitHub Pages: branch `main`, site root `/`. If the play URL 404s right after a push, wait 1–2 minutes.
 
-### Option B — local
+### Local
 
 ```bash
 cd Prototype
@@ -21,6 +24,10 @@ python3 -m http.server 8765
 ```
 
 Or open `Prototype/index.html` directly in a modern browser.
+
+### Continue later (new session)
+
+Read **[HANDOFF.md](./HANDOFF.md)** — status, git, bugs fixed, next steps, agent checklist.
 
 ## What’s in the prototype
 
@@ -35,7 +42,8 @@ Or open `Prototype/index.html` directly in a modern browser.
 ## Structure
 
 ```
-Candy Crush Clone/
+Candy Crush Clone/      # git root → glimmer-path-prototype
+├── HANDOFF.md          # Session continuity (read when resuming)
 ├── Prototype/          # Playable web prototype
 │   ├── index.html
 │   ├── css/

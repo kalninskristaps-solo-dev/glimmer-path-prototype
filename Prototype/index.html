@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#2a1848" />
+  <title>Glimmer Path — Prototype</title>
+  <link rel="stylesheet" href="css/prototype.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Living world backdrop (visual hook) -->
+    <div class="world-bg" aria-hidden="true">
+      <div class="world-aurora"></div>
+      <div class="world-glow world-glow-a"></div>
+      <div class="world-glow world-glow-b"></div>
+      <div class="world-glow world-glow-c"></div>
+      <div class="world-path"></div>
+      <div class="world-runes">
+        <span class="rune r1">✧</span>
+        <span class="rune r2">◈</span>
+        <span class="rune r3">✦</span>
+        <span class="rune r4">❀</span>
+        <span class="rune r5">◎</span>
+        <span class="rune r6">✧</span>
+        <span class="rune r7">❖</span>
+        <span class="rune r8">✵</span>
+      </div>
+      <div class="world-sparkles"></div>
+    </div>
+
+    <!-- Boot -->
+    <section id="screen-boot" class="screen active" aria-label="Loading">
+      <div class="boot-mark">
+        <div class="luma-orb boot-orb" aria-hidden="true"></div>
+        <p class="boot-title">Glimmer Path</p>
+        <p class="boot-sub">Prototype</p>
+      </div>
+    </section>
+
+    <!-- Title — first-minute hook -->
+    <section id="screen-title" class="screen" aria-label="Title">
+      <div class="title-stack hook-title">
+        <div class="hook-crisis" aria-hidden="true">
+          <div class="save-avatar char-pip endangered title-pip" id="title-pip"></div>
+          <div class="hook-dim-veil"></div>
+        </div>
+        <p class="hook-urgency" id="title-urgency">A child is forgetting her name</p>
+        <h1 class="wordmark">Glimmer Path</h1>
+        <p class="tagline">Match light in 10 seconds. Save Pip before The Dim takes her.</p>
+        <button type="button" class="btn btn-primary btn-pulse" id="btn-new-path">Save her now</button>
+        <button type="button" class="btn btn-ghost" id="btn-continue" hidden>Continue path</button>
+        <button type="button" class="btn btn-text" id="btn-reset">Reset new game</button>
+      </div>
+      <p class="proto-badge">Prototype · free · not gambling</p>
+    </section>
+
+    <!-- First save payoff (massive hook after level 1) -->
+    <section id="screen-save-reveal" class="screen" aria-label="Saved">
+      <div class="save-reveal-card">
+        <div class="save-reveal-burst" aria-hidden="true"></div>
+        <div class="save-avatar char-pip saved big" id="reveal-avatar"></div>
+        <p class="save-reveal-kicker">SAVED</p>
+        <h2 id="reveal-name">Pip</h2>
+        <p class="result-line" id="reveal-line">She remembers the lullaby.</p>
+        <div class="hook-rewards">
+          <div class="hook-chip"><span class="ico-keepsake sm"></span> First keepsake</div>
+          <div class="hook-chip"><span class="ico-lantern sm"></span> Lantern lit</div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-reveal-continue">See who waits next</button>
+      </div>
+    </section>
+
+    <!-- Story / dialogue -->
+    <section id="screen-story" class="screen" aria-label="Story">
+      <div class="story-bg" aria-hidden="true"></div>
+      <div class="story-card">
+        <div class="luma-orb story-orb" id="story-luma" aria-hidden="true"></div>
+        <p class="story-speaker" id="story-speaker">Luma</p>
+        <p class="story-text" id="story-text"></p>
+        <div class="story-actions">
+          <button type="button" class="btn btn-text" id="btn-story-skip">Skip intro</button>
+          <button type="button" class="btn btn-primary" id="btn-story-next">Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Level intro -->
+    <section id="screen-level-intro" class="screen" aria-label="Level intro">
+      <div class="level-intro-card">
+        <p class="ep-label" id="intro-ep">Episode 1 · First Spark</p>
+        <h2 class="level-title" id="intro-title">Level 1</h2>
+        <p class="luma-line" id="intro-luma"></p>
+        <div class="goal-panel" id="intro-goals"></div>
+        <p class="moves-hint" id="intro-moves"></p>
+        <button type="button" class="btn btn-primary" id="btn-play-level">Light the board</button>
+      </div>
+    </section>
+
+    <!-- Play -->
+    <section id="screen-play" class="screen" aria-label="Gameplay">
+      <header class="play-top">
+        <div class="meta-row">
+          <div class="meta-pill" id="pill-energy" title="Path energy">
+            <span class="ico-energy" aria-hidden="true"></span>
+            <span id="hud-energy">5</span>/<span id="hud-energy-max">5</span>
+          </div>
+          <div class="meta-pill streak" id="pill-streak" title="Lantern days — win once a day to keep Luma’s wick warm">
+            <span class="ico-lantern" aria-hidden="true"></span>
+            <span id="hud-streak">0</span>
+          </div>
+          <div class="meta-pill album" id="pill-album" title="Keepsakes — memories saved from The Dim">
+            <span class="ico-keepsake" aria-hidden="true"></span>
+            <span id="hud-album">0</span>/<span id="hud-album-max">12</span>
+          </div>
+        </div>
+        <div class="play-hud">
+          <button type="button" class="btn-icon" id="btn-pause" title="Pause" aria-label="Pause">❚❚</button>
+          <div class="hud-mid">
+            <span class="hud-level" id="hud-level">1</span>
+            <div class="goal-bar" id="hud-goals"></div>
+          </div>
+          <div class="hud-moves" title="Moves left">
+            <span class="moves-num" id="hud-moves">20</span>
+            <span class="moves-label">moves</span>
+          </div>
+        </div>
+      </header>
+      <div class="board-wrap">
+        <div class="board-tray" id="board-tray">
+          <div id="board" class="board" role="grid" aria-label="Mote board"></div>
+          <div class="fx-callout" id="fx-callout" hidden aria-hidden="true"></div>
+          <div class="cascade-meter" id="cascade-meter" hidden>
+            <span id="cascade-text">Cascade ×2</span>
+          </div>
+        </div>
+        <p class="hint-line" id="hint-line" hidden></p>
+      </div>
+      <footer class="play-foot">
+        <div class="luma-corner">
+          <div class="luma-orb tiny" aria-hidden="true"></div>
+          <p id="luma-tip">Swap two neighbours to align three of a kind.</p>
+        </div>
+      </footer>
+    </section>
+
+    <!-- Energy empty (legal soft wall) -->
+    <div id="overlay-energy" class="overlay" hidden>
+      <div class="overlay-card energy-card">
+        <h3>Path needs rest</h3>
+        <p class="result-line" id="energy-line">Energy recharges for free. Real timer — no fake clock.</p>
+        <p class="energy-timer" id="energy-timer">Next ✦ in 0:30</p>
+        <button type="button" class="btn btn-primary" id="btn-energy-wait">Wait (free)</button>
+        <button type="button" class="btn btn-ghost" id="btn-energy-ad" title="Optional rewarded ad — labeled">Watch ad · +1 ✦</button>
+        <button type="button" class="btn btn-text" id="btn-energy-map">Back to map</button>
+      </div>
+    </div>
+
+    <!-- Pause -->
+    <div id="overlay-pause" class="overlay" hidden>
+      <div class="overlay-card">
+        <h3>Paused</h3>
+        <p class="muted">Quit counts as a failed attempt in the full game. Prototype: free exit.</p>
+        <button type="button" class="btn btn-primary" id="btn-resume">Resume</button>
+        <button type="button" class="btn btn-ghost" id="btn-quit-level">Leave board</button>
+      </div>
+    </div>
+
+    <!-- Win -->
+    <section id="screen-win" class="screen" aria-label="Victory">
+      <div class="result-card win-card">
+        <div class="stars" id="win-stars" aria-label="Stars">★ ★ ★</div>
+        <h2 id="win-title">Path brightens</h2>
+        <p class="result-line" id="win-line">The motes remember.</p>
+        <div class="hook-rewards" id="win-hooks">
+          <div class="hook-chip" id="win-streak-chip"><span class="ico-lantern sm"></span> Lantern day</div>
+          <div class="hook-chip album" id="win-album-chip"><span class="ico-keepsake sm"></span> Keepsake</div>
+        </div>
+        <div class="progress-tease" id="win-album-bar-wrap">
+          <div class="progress-tease-label"><span>Keepsakes saved</span><span id="win-album-label">3/12</span></div>
+          <div class="progress-track"><div class="progress-fill" id="win-album-fill"></div></div>
+        </div>
+        <p class="keepsake-line" id="win-keepsake-line" hidden></p>
+        <div class="grove-flash" id="grove-flash" hidden>
+          <p class="grove-label">Home Glade</p>
+          <div class="mini-grove" id="mini-grove"></div>
+        </div>
+        <p class="one-more" id="win-one-more">Luma is still flickering. One more board holds another name.</p>
+        <button type="button" class="btn btn-primary" id="btn-win-spin">Lucky Wick · free spin</button>
+        <button type="button" class="btn btn-ghost" id="btn-win-next">One more level</button>
+        <button type="button" class="btn btn-text" id="btn-win-map">Map</button>
+      </div>
+    </section>
+
+    <!-- Lucky Wick — free slot-style spin (no IAP, transparent free RNG) -->
+    <div id="overlay-spin" class="overlay" hidden>
+      <div class="overlay-card spin-card">
+        <h3>Lucky Wick</h3>
+        <p class="muted spin-legal">Free spin only · not paid gambling · real odds on the strip</p>
+        <div class="reel-frame">
+          <div class="reel-window">
+            <div class="reel-strip" id="reel-1"></div>
+          </div>
+          <div class="reel-window">
+            <div class="reel-strip" id="reel-2"></div>
+          </div>
+          <div class="reel-window">
+            <div class="reel-strip" id="reel-3"></div>
+          </div>
+          <div class="reel-payline" aria-hidden="true"></div>
+        </div>
+        <p class="spin-result" id="spin-result">Pull the wick…</p>
+        <button type="button" class="btn btn-primary" id="btn-spin-pull">Spin free</button>
+        <button type="button" class="btn btn-ghost" id="btn-spin-done" hidden>Claim & continue</button>
+      </div>
+    </div>
+
+    <!-- Lose -->
+    <section id="screen-lose" class="screen" aria-label="Defeat">
+      <div class="result-card lose-card">
+        <h2 id="lose-title">So close…</h2>
+        <p class="result-line" id="lose-line">The Dim waits. You do not.</p>
+        <div class="near-miss" id="near-miss" hidden>
+          <div class="progress-tease-label"><span>Almost</span><span id="near-miss-pct">80%</span></div>
+          <div class="progress-track"><div class="progress-fill near" id="near-miss-fill"></div></div>
+        </div>
+        <p class="muted" id="lose-sub">Energy spent. First fail of the day is free in full product — prototype: −1 ✦.</p>
+        <button type="button" class="btn btn-primary" id="btn-retry">Try again</button>
+        <button type="button" class="btn btn-ghost" id="btn-lose-map">Path map</button>
+      </div>
+    </section>
+
+    <!-- Grove -->
+    <section id="screen-grove" class="screen" aria-label="Home Glade">
+      <div class="grove-scene">
+        <h2 class="grove-title">Home Glade</h2>
+        <p class="grove-blurb" id="grove-blurb">Your first light took root.</p>
+        <div class="grove-stage" id="grove-stage">
+          <div class="grove-soil"></div>
+          <div class="grove-path"></div>
+          <div class="grove-lantern" id="grove-lantern"></div>
+          <div class="grove-flora" id="grove-flora"></div>
+          <div class="grove-particles" aria-hidden="true"></div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-grove-continue">Walk the path</button>
+      </div>
+    </section>
+
+    <!-- Map — living path -->
+    <section id="screen-map" class="screen" aria-label="Campaign path">
+      <div class="map-world" aria-hidden="true">
+        <div class="map-mist"></div>
+        <div class="map-fireflies" id="map-fireflies"></div>
+      </div>
+
+      <header class="map-top">
+        <div class="map-title-row">
+          <div class="map-luma-badge">
+            <div class="luma-orb map-luma" id="map-luma-orb"></div>
+            <div class="map-luma-text">
+              <strong>Luma</strong>
+              <span id="map-luma-mood">Wick low… stay with me</span>
+            </div>
+          </div>
+          <button type="button" class="meta-pill daily map-wick-btn" id="btn-daily-prism" title="Free daily Lucky Wick">Lucky Wick</button>
+        </div>
+
+        <div class="map-timers" aria-label="Timers">
+          <div class="timer-card urgent" id="timer-dim" title="Real countdown — Dim pressure on uncleared nodes">
+            <span class="timer-ico dim-ico"></span>
+            <div class="timer-body">
+              <span class="timer-label">Dim pressure</span>
+              <span class="timer-value" id="timer-dim-value">8:00</span>
+              <div class="timer-bar"><div class="timer-fill dim" id="timer-dim-fill"></div></div>
+            </div>
+          </div>
+          <div class="timer-card restore" id="timer-energy" title="Energy restores for free on a real timer">
+            <span class="timer-ico energy-ico"></span>
+            <div class="timer-body">
+              <span class="timer-label">Live restore</span>
+              <span class="timer-value" id="timer-energy-value">Full</span>
+              <div class="timer-bar"><div class="timer-fill energy" id="timer-energy-fill"></div></div>
+            </div>
+          </div>
+          <div class="timer-card streak" id="timer-streak" title="Win once before midnight to keep lantern days">
+            <span class="ico-lantern"></span>
+            <div class="timer-body">
+              <span class="timer-label">Lantern day</span>
+              <span class="timer-value" id="timer-streak-value">—</span>
+              <div class="timer-bar"><div class="timer-fill streak" id="timer-streak-fill"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-save-banner" id="map-save-banner">
+          <div class="save-avatar" id="save-avatar" data-who="pip"></div>
+          <div class="save-copy">
+            <p class="save-who" id="save-who">Someone waits in the mist</p>
+            <p class="save-plea" id="save-plea">Clear the next glade before The Dim thickens.</p>
+          </div>
+          <div class="save-status">
+            <span class="meta-pill"><span class="ico-energy sm"></span> <span id="map-energy-n">5</span></span>
+            <span class="meta-pill streak"><span class="ico-lantern sm"></span> <span id="map-streak-n">0</span></span>
+          </div>
+        </div>
+      </header>
+
+      <div class="map-scroll">
+        <div class="path-stage" id="path-stage">
+          <svg class="path-svg" id="path-svg" viewBox="0 0 320 720" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="pathGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ffe066"/>
+                <stop offset="50%" stop-color="#ff8ad4"/>
+                <stop offset="100%" stop-color="#7ae0ff"/>
+              </linearGradient>
+              <filter id="pathGlow">
+                <feGaussianBlur stdDeviation="3" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path id="path-trail-dim" class="path-trail dim" d="" fill="none"/>
+            <path id="path-trail-lit" class="path-trail lit" d="" fill="none" filter="url(#pathGlow)"/>
+            <circle id="path-walker" class="path-walker" r="7" cx="0" cy="0"/>
+          </svg>
+          <div class="map-path" id="map-path"></div>
+        </div>
+      </div>
+
+      <footer class="map-footer">
+        <button type="button" class="btn btn-ghost" id="btn-map-grove">Home Glade</button>
+        <button type="button" class="btn btn-primary" id="btn-map-play">
+          <span id="map-play-label">Rescue next</span>
+        </button>
+      </footer>
+    </section>
+
+    <!-- Campaign complete — real ending -->
+    <section id="screen-complete" class="screen" aria-label="Path complete">
+      <div class="result-card complete-card">
+        <div class="luma-orb" aria-hidden="true"></div>
+        <p class="save-reveal-kicker">PATH CLEARED</p>
+        <h2>You held every name</h2>
+        <p class="result-line" id="complete-line">Pip, Nori, Moss Elder, Kess, and Luma — safe from The Dim. Prototype Act I ends here.</p>
+        <div class="saved-roster" id="saved-roster" aria-label="Saved characters"></div>
+        <p class="muted">Full game: seasons, more souls, grove cosmetics. Come back tomorrow so Luma doesn’t forget you.</p>
+        <button type="button" class="btn btn-primary" id="btn-replay">Play Act I again</button>
+        <button type="button" class="btn btn-ghost" id="btn-complete-map">View path map</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/story.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

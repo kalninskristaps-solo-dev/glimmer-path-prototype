@@ -25,10 +25,6 @@ python3 -m http.server 8765
 
 Or open `Prototype/index.html` directly in a modern browser.
 
-### Continue later (new session)
-
-Read **[HANDOFF.md](./HANDOFF.md)** — status, git, bugs fixed, next steps, agent checklist.
-
 ## What’s in the prototype
 
 | Area | Contents |
